@@ -13,6 +13,7 @@
   --green-soft: #98f3d0;
   --muted: rgba(235, 240, 255, 0.68);
   --shadow-lg: 0 32px 120px rgba(8, 11, 24, 0.55);
+  --page-gutter: 1.1rem;
 }
 
 @theme inline {
@@ -93,7 +94,7 @@ a {
 }
 
 .section-content {
-  width: min(1540px, calc(100vw - 1.6rem));
+  width: min(1540px, calc(100vw - var(--page-gutter) * 2));
   margin: 0 auto;
 }
 
@@ -579,8 +580,12 @@ a {
 }
 
 @media (min-width: 768px) {
+  :root {
+    --page-gutter: 1.5rem;
+  }
+
   .section-content {
-    width: min(1540px, calc(100vw - 3rem));
+    width: min(1540px, calc(100vw - var(--page-gutter) * 2));
   }
 
   .metric-card,
@@ -597,6 +602,10 @@ a {
 }
 
 @media (max-width: 767px) {
+  :root {
+    --page-gutter: 1.15rem;
+  }
+
   .section-title {
     font-size: 2.2rem;
     line-height: 1.12;
@@ -608,11 +617,39 @@ a {
   }
 
   .section-content {
-    width: min(1540px, calc(100vw - 1rem));
+    width: min(1540px, calc(100vw - var(--page-gutter) * 2));
   }
 
   .glass-panel,
   .admin-panel {
+    border-radius: 1.5rem;
+  }
+
+  .metric-card,
+  .service-card,
+  .advantage-card,
+  .process-card,
+  .item-panel {
+    padding: 1.25rem;
+  }
+
+  .hero-section .section-content {
+    gap: 2rem;
+  }
+
+  .hero-section .primary-button,
+  .hero-section .secondary-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .image-stage {
+    padding: 0.8rem;
+    border-radius: 1.75rem;
+  }
+
+  .image-stage-inner {
+    padding: 0.7rem;
     border-radius: 1.5rem;
   }
 }
