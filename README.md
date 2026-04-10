@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VM Brands 官网
 
-## Getting Started
+一个基于 `Next.js 16 + TypeScript` 的前后台品牌官网项目，面向：
 
-First, run the development server:
+- 姜生品牌咨询（深圳）有限公司
+- 域名：`vmbrands.com`
+- 业务范围：品牌出海咨询、品牌体系建立、品牌 VI 设计、品牌官网建设、品牌内容制作、品牌视频制作、平台代运营、海外社媒运营、全球展会服务
+
+## 已实现内容
+
+- 高端全宽首页视觉，主色为紫色 + 绿色，带动态渐变、浮层、滚动平台带与滚动显现动画
+- 首页首屏接入并压缩 `images/jiangsheng.png`，输出为 `public/images/jiangsheng-hero.webp`
+- 前台咨询表单，可将线索写入本地数据文件
+- 后台登录页与后台内容管理页
+- 后台可编辑首页主要文案、指标、服务矩阵、优势、流程、平台与 CTA
+- 后台可查看前台提交的咨询线索
+- `robots.txt` 与 `sitemap.xml`
+
+## 数据存储
+
+当前版本使用本地 JSON 文件存储：
+
+- `content/site-content.json`：官网内容
+- `content/leads.json`：咨询线索
+
+这适合当前快速上线和本地部署。如果后续要做多人协作、云端持久化或更高安全性，建议升级到数据库或 CMS。
+
+## 启动方式
+
+1. 安装依赖
+
+```bash
+npm install
+```
+
+2. 复制环境变量
+
+```bash
+copy .env.example .env.local
+```
+
+3. 启动开发环境
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. 生产构建
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 后台默认信息
 
-## Learn More
+- 后台地址：`/admin/login`
+- 默认账号：`admin`
+- 默认密码：`Vmbrands2026!`
 
-To learn more about Next.js, take a look at the following resources:
+上线前请务必修改：
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `ADMIN_PASSWORD`
+- `ADMIN_SECRET`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 构建验证
 
-## Deploy on Vercel
+已通过：
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run lint
+npm run build
+```
