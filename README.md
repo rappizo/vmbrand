@@ -39,6 +39,14 @@ npm install
 copy .env.example .env.local
 ```
 
+For production deployments, set `VMBRAND_CONTENT_DIR` to a persistent writable directory so booking leads and CMS edits can be saved reliably.
+
+```bash
+VMBRAND_CONTENT_DIR=/var/www/vmbrand-data
+```
+
+For Vercel deployments, prefer `BLOB_READ_WRITE_TOKEN` instead of filesystem storage. When this env var is present, the booking leads and CMS content will be stored in Vercel Blob automatically.
+
 3. 启动开发环境
 
 ```bash
