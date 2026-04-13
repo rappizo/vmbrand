@@ -32,6 +32,8 @@ type Notice =
     }
   | null;
 
+type AdminView = "home" | "leads";
+
 const emptyMetric = {
   value: "0+",
   label: "新增指标",
@@ -96,6 +98,7 @@ export function AdminDashboard({
   const router = useRouter();
   const [content, setContent] = useState(initialContent);
   const [leads, setLeads] = useState(initialLeads);
+  const [activeView, setActiveView] = useState<AdminView>("home");
   const [searchText, setSearchText] = useState("");
   const [notice, setNotice] = useState<Notice>(null);
   const [isRefreshingLeads, setIsRefreshingLeads] = useState(false);
@@ -418,6 +421,26 @@ export function AdminDashboard({
     router.refresh();
   }
 
+  const navItems: Array<{
+    id: AdminView;
+    title: string;
+    description: string;
+    badge: string;
+  }> = [
+    {
+      id: "home",
+      title: "首页设置",
+      description: "首页文案、模块和展示内容",
+      badge: `${content.services.length} 项内容`,
+    },
+    {
+      id: "leads",
+      title: "咨询线索",
+      description: "官网预约与咨询表单线索",
+      badge: `${leads.length} 条线索`,
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-[#050816] px-4 py-8 text-white sm:px-6 lg:px-10">
       <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-6">
@@ -448,7 +471,52 @@ export function AdminDashboard({
           </button>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+          <aside className="admin-panel h-fit xl:sticky xl:top-6">
+            <div className="space-y-3">
+              <p className="text-sm uppercase tracking-[0.28em] text-white/42">
+                项目
+              </p>
+              <h2 className="font-display text-2xl font-semibold text-white">
+                后台结构
+              </h2>
+              <p className="text-sm leading-7 text-white/62">
+                左边是项目，右边是内容。当前先收成首页设置和咨询线索两类，后面新增页面也能继续扩展。
+              </p>
+            </div>
+
+            <div className="mt-6 space-y-3">
+              {navItems.map((item) => {
+                const isActive = item.id === activeView;
+
+                return (
+                  <button
+                    key={item.id}
+                    className={`w-full rounded-[1.6rem] border px-4 py-4 text-left transition ${
+                      isActive
+                        ? "border-emerald-300/30 bg-[linear-gradient(135deg,rgba(124,58,237,0.24),rgba(37,211,154,0.16))] shadow-[0_18px_50px_rgba(6,10,24,0.35)]"
+                        : "border-white/10 bg-white/[0.03] hover:border-white/18 hover:bg-white/[0.05]"
+                    }`}
+                    type="button"
+                    onClick={() => setActiveView(item.id)}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-display text-xl font-semibold text-white">
+                          {item.title}
+                        </p>
+                        <p className="mt-2 text-sm leading-6 text-white/58">
+                          {item.description}
+                        </p>
+                      </div>
+                      <span className="admin-chip whitespace-nowrap">{item.badge}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
           <SummaryCard
             title="官网服务数"
             value={`${content.services.length}`}
@@ -466,8 +534,34 @@ export function AdminDashboard({
           />
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
-          <form className="space-y-6" onSubmit={handleSave}>
+          </aside>
+
+          <main className="min-w-0">
+            {activeView === "home" ? (
+              <div className="space-y-6">
+                <div className="admin-panel flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                  <div>
+                    <span className="admin-chip">HOME SETTINGS</span>
+                    <h2 className="mt-4 font-display text-3xl font-semibold text-white">
+                      首页设置
+                    </h2>
+                    <p className="mt-3 max-w-3xl text-sm leading-7 text-white/64">
+                      这里统一管理所有主页相关内容，后续如果增加案例页、关于我们或其他栏目，也可以继续放到左侧项目里。
+                    </p>
+                  </div>
+
+                  <button
+                    className="primary-button"
+                    type="submit"
+                    form="home-settings-form"
+                    disabled={isSaving}
+                  >
+                    <Save className="h-4 w-4" />
+                    {isSaving ? "保存中..." : "保存首页设置"}
+                  </button>
+                </div>
+
+                <form className="space-y-6" id="home-settings-form" onSubmit={handleSave}>
             <Panel
               title="站点与首屏信息"
               description="控制官网最重要的品牌信息和首屏 Banner 文案。"
@@ -883,9 +977,35 @@ export function AdminDashboard({
                 {isSaving ? "保存中..." : "保存站点内容"}
               </button>
             </div>
-          </form>
+                </form>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                <div className="admin-panel flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                  <div>
+                    <span className="admin-chip">LEADS</span>
+                    <h2 className="mt-4 font-display text-3xl font-semibold text-white">
+                      咨询线索
+                    </h2>
+                    <p className="mt-3 max-w-3xl text-sm leading-7 text-white/64">
+                      这里集中查看官网提交的预约和咨询表单，方便团队统一跟进。
+                    </p>
+                  </div>
 
-          <div className="space-y-6">
+                  <button
+                    className="secondary-button"
+                    type="button"
+                    onClick={() => void refreshLeads()}
+                    disabled={isRefreshingLeads}
+                  >
+                    <RefreshCw
+                      className={`h-4 w-4 ${isRefreshingLeads ? "animate-spin" : ""}`}
+                    />
+                    {isRefreshingLeads ? "刷新中..." : "刷新线索"}
+                  </button>
+                </div>
+
+                <div className="space-y-6">
             <Panel
               title="官网咨询线索"
               description="来自前台表单的咨询需求，方便你快速跟进。"
@@ -955,8 +1075,11 @@ export function AdminDashboard({
                   </div>
                 )}
               </div>
-            </Panel>
-          </div>
+                  </Panel>
+                </div>
+              </div>
+            )}
+          </main>
         </div>
       </div>
     </div>
