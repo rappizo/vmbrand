@@ -1,8 +1,22 @@
 "use client";
 
-import { useDeferredValue, useState, useTransition } from "react";
+import {
+  useDeferredValue,
+  useEffect,
+  useEffectEvent,
+  useState,
+  useTransition,
+} from "react";
 import { useRouter } from "next/navigation";
-import { Inbox, LogOut, Plus, Save, Search, Trash2 } from "lucide-react";
+import {
+  Inbox,
+  LogOut,
+  Plus,
+  RefreshCw,
+  Save,
+  Search,
+  Trash2,
+} from "lucide-react";
 
 import type { Lead, SiteContent } from "@/lib/site-schema";
 
@@ -81,13 +95,15 @@ export function AdminDashboard({
 }: AdminDashboardProps) {
   const router = useRouter();
   const [content, setContent] = useState(initialContent);
+  const [leads, setLeads] = useState(initialLeads);
   const [searchText, setSearchText] = useState("");
   const [notice, setNotice] = useState<Notice>(null);
+  const [isRefreshingLeads, setIsRefreshingLeads] = useState(false);
   const [isSaving, startSaving] = useTransition();
   const [isLoggingOut, startLoggingOut] = useTransition();
   const deferredSearch = useDeferredValue(searchText);
 
-  const filteredLeads = initialLeads.filter((lead) => {
+  const filteredLeads = leads.filter((lead) => {
     const query = deferredSearch.trim().toLowerCase();
 
     if (!query) {
@@ -107,6 +123,74 @@ export function AdminDashboard({
 
     return haystack.includes(query);
   });
+
+  async function refreshLeads(silent = false) {
+    if (isRefreshingLeads) {
+      return;
+    }
+
+    if (!silent) {
+      setNotice(null);
+    }
+
+    setIsRefreshingLeads(true);
+
+    try {
+      const response = await fetch("/api/leads", {
+        cache: "no-store",
+      });
+
+      const payload = (await response.json().catch(() => null)) as
+        | { leads?: Lead[]; message?: string }
+        | null;
+
+      if (!response.ok || !Array.isArray(payload?.leads)) {
+        if (!silent) {
+          setNotice({
+            tone: "error",
+            text: payload?.message ?? "线索列表刷新失败，请稍后重试。",
+          });
+        }
+        return;
+      }
+
+      setLeads(payload.leads);
+
+      if (!silent) {
+        setNotice({
+          tone: "success",
+          text: "官网咨询线索已刷新。",
+        });
+      }
+    } catch {
+      if (!silent) {
+        setNotice({
+          tone: "error",
+          text: "线索列表刷新失败，请稍后重试。",
+        });
+      }
+    } finally {
+      setIsRefreshingLeads(false);
+    }
+  }
+
+  const refreshLeadsOnFocus = useEffectEvent(async () => {
+    await refreshLeads(true);
+  });
+
+  useEffect(() => {
+    void refreshLeadsOnFocus();
+
+    function handleWindowFocus() {
+      void refreshLeadsOnFocus();
+    }
+
+    window.addEventListener("focus", handleWindowFocus);
+
+    return () => {
+      window.removeEventListener("focus", handleWindowFocus);
+    };
+  }, []);
 
   function updateSite(field: keyof SiteContent["site"], value: string) {
     setContent((current) => ({
@@ -372,7 +456,7 @@ export function AdminDashboard({
           />
           <SummaryCard
             title="品牌线索数"
-            value={`${initialLeads.length}`}
+            value={`${leads.length}`}
             detail="来自官网咨询表单的累计线索。"
           />
           <SummaryCard
@@ -806,6 +890,20 @@ export function AdminDashboard({
               title="官网咨询线索"
               description="来自前台表单的咨询需求，方便你快速跟进。"
             >
+              <div className="flex justify-end">
+                <button
+                  className="secondary-button"
+                  type="button"
+                  onClick={() => void refreshLeads()}
+                  disabled={isRefreshingLeads}
+                >
+                  <RefreshCw
+                    className={`h-4 w-4 ${isRefreshingLeads ? "animate-spin" : ""}`}
+                  />
+                  {isRefreshingLeads ? "刷新中..." : "刷新线索"}
+                </button>
+              </div>
+
               <label className="field-shell">
                 <span className="field-label">搜索线索</span>
                 <div className="relative">

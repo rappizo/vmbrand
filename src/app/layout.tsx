@@ -1,16 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-
-const bodyFont = Manrope({
-  variable: "--font-body",
-  subsets: ["latin"],
-});
-
-const displayFont = Space_Grotesk({
-  variable: "--font-display",
-  subsets: ["latin"],
-});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vmbrands.com";
 
@@ -70,10 +59,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="zh-CN"
-      className={`${bodyFont.variable} ${displayFont.variable} h-full antialiased`}
-    >
+    <html lang="zh-CN" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
       </body>

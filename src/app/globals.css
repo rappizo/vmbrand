@@ -1,6 +1,18 @@
 @import "tailwindcss";
 
 :root {
+  --font-body:
+    "Manrope",
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Microsoft YaHei",
+    sans-serif;
+  --font-display:
+    "Space Grotesk",
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Microsoft YaHei",
+    sans-serif;
   --background: #050816;
   --foreground: #eef3ff;
   --surface: rgba(13, 19, 43, 0.72);
