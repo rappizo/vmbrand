@@ -388,7 +388,7 @@ export function AdminDashboard({
               title="站点与首屏信息"
               description="控制官网最重要的品牌信息和首屏 Banner 文案。"
             >
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-4 md:grid-cols-3">
                 <Field
                   label="公司名称"
                   value={content.site.companyName}
@@ -751,6 +751,11 @@ export function AdminDashboard({
                   label="联系邮箱"
                   value={content.cta.email}
                   onChange={(value) => updateCta("email", value)}
+                />
+                <Field
+                  label="鑱旂郴鐢佃瘽"
+                  value={content.cta.phone}
+                  onChange={(value) => updateCta("phone", value)}
                 />
               </div>
 

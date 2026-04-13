@@ -63,6 +63,7 @@ export const siteContentSchema = z.object({
     title: shortText.max(80),
     description: bodyText.max(320),
     email: shortText.max(80),
+    phone: shortText.max(40),
     domain: shortText.max(80),
     note: bodyText.max(240),
   }),

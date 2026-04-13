@@ -16,6 +16,7 @@ import {
   Megaphone,
   MonitorSmartphone,
   Palette,
+  Phone,
   Quote,
   Rocket,
   ShieldCheck,
@@ -187,7 +188,7 @@ export default async function HomePage() {
                       fill
                       priority
                       sizes="(min-width: 1280px) 42vw, (min-width: 768px) 48vw, 92vw"
-                      className="object-cover object-top scale-[1.04]"
+                      className="object-cover object-top scale-[1.04] -translate-y-2 sm:-translate-y-3"
                     />
                   </div>
                 </div>
@@ -460,11 +461,14 @@ export default async function HomePage() {
                   </p>
                 </div>
                 <div className="advantage-card">
-                  <Mail className="h-6 w-6 text-emerald-200" />
+                  <Phone className="h-6 w-6 text-emerald-200" />
                   <h3 className="mt-6 font-display text-2xl font-semibold text-white">
                     商务沟通
                   </h3>
-                  <p className="mt-4 text-sm leading-7 text-white/64">
+                  <p className="mt-4 font-display text-2xl font-semibold text-white">
+                    {content.cta.phone}
+                  </p>
+                  <p className="mt-3 text-sm leading-7 text-white/52">
                     {content.cta.email}
                   </p>
                 </div>
@@ -484,23 +488,23 @@ export default async function HomePage() {
               {content.cta.note}
             </p>
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
               <div className="item-panel">
                 <Mail className="h-5 w-5 text-emerald-200" />
                 <p className="mt-5 text-sm uppercase tracking-[0.28em] text-white/42">
                   Email
                 </p>
-                <p className="mt-3 font-display text-2xl font-semibold text-white">
+                <p className="mt-3 max-w-full break-all font-display text-[1.55rem] font-semibold leading-tight text-white sm:text-[1.7rem] xl:text-2xl">
                   {content.cta.email}
                 </p>
               </div>
               <div className="item-panel">
-                <Globe2 className="h-5 w-5 text-violet-200" />
+                <Phone className="h-5 w-5 text-violet-200" />
                 <p className="mt-5 text-sm uppercase tracking-[0.28em] text-white/42">
-                  Domain
+                  Phone
                 </p>
-                <p className="mt-3 font-display text-2xl font-semibold text-white">
-                  {content.cta.domain}
+                <p className="mt-3 max-w-full font-display text-[1.55rem] font-semibold leading-tight text-white sm:text-[1.7rem] xl:text-2xl">
+                  {content.cta.phone}
                 </p>
               </div>
             </div>
