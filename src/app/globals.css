@@ -360,6 +360,47 @@ a {
   color: white;
 }
 
+.header-cta {
+  min-height: 2.95rem;
+  padding-inline: 1.15rem;
+}
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.24rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 24, 52, 0.72);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 16px 42px rgba(5, 8, 22, 0.22);
+}
+
+.lang-switch-button {
+  min-width: 3rem;
+  padding: 0.62rem 0.8rem;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.lang-switch-button:hover {
+  color: white;
+}
+
+.lang-switch-button-active {
+  background:
+    linear-gradient(135deg, rgba(124, 58, 237, 0.98), rgba(37, 211, 154, 0.88));
+  color: white;
+  box-shadow:
+    0 10px 28px rgba(124, 58, 237, 0.2),
+    0 10px 22px rgba(37, 211, 154, 0.14);
+}
+
 .data-pill,
 .tag-pill,
 .platform-pill,
@@ -616,6 +657,23 @@ a {
 @media (max-width: 767px) {
   :root {
     --page-gutter: 1.15rem;
+  }
+
+  .lang-switch {
+    padding: 0.2rem;
+  }
+
+  .lang-switch-button {
+    min-width: 2.6rem;
+    padding: 0.56rem 0.65rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+  }
+
+  .header-cta {
+    min-height: 2.8rem;
+    padding-inline: 0.95rem;
+    font-size: 0.88rem;
   }
 
   .section-title {

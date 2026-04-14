@@ -1,8 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import {
+  getContactFormCopy,
+  type Language,
+} from "@/lib/site-localization";
 
 type ContactFormProps = {
+  language: Language;
   serviceOptions: string[];
 };
 
@@ -28,18 +34,31 @@ function createInitialState(serviceOptions: string[]): LeadFormState {
     contactName: "",
     contact: "",
     targetMarket: "",
-    serviceNeed: serviceOptions[0] ?? "品牌出海咨询",
+    serviceNeed: serviceOptions[0] ?? "",
     message: "",
   };
 }
 
-export function ContactForm({ serviceOptions }: ContactFormProps) {
+export function ContactForm({
+  language,
+  serviceOptions,
+}: ContactFormProps) {
+  const copy = getContactFormCopy(language);
   const [formState, setFormState] = useState<LeadFormState>(() =>
     createInitialState(serviceOptions),
   );
   const [notice, setNotice] = useState<Notice>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+
+  useEffect(() => {
+    setFormState((current) => ({
+      ...current,
+      serviceNeed: serviceOptions.includes(current.serviceNeed)
+        ? current.serviceNeed
+        : (serviceOptions[0] ?? ""),
+    }));
+  }, [serviceOptions]);
 
   function updateField(field: keyof LeadFormState, value: string) {
     setFormState((current) => ({
@@ -67,14 +86,13 @@ export function ContactForm({ serviceOptions }: ContactFormProps) {
         body: JSON.stringify(formState),
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | { message?: string }
-        | null;
-
       if (!response.ok) {
         setNotice({
           tone: "error",
-          text: payload?.message ?? "预约提交失败，请稍后再试或直接联系我们。",
+          text:
+            response.status === 400
+              ? copy.validationError
+              : copy.systemError,
         });
         return;
       }
@@ -82,13 +100,13 @@ export function ContactForm({ serviceOptions }: ContactFormProps) {
       setFormState(createInitialState(serviceOptions));
       setNotice({
         tone: "success",
-        text: payload?.message ?? "预约信息已提交。",
+        text: copy.successNotice,
       });
       setIsSuccessDialogOpen(true);
     } catch {
       setNotice({
         tone: "error",
-        text: "网络连接异常，请稍后再试，或直接通过电话和邮箱联系团队。",
+        text: copy.networkError,
       });
     } finally {
       setIsSubmitting(false);
@@ -100,25 +118,25 @@ export function ContactForm({ serviceOptions }: ContactFormProps) {
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="grid gap-4 md:grid-cols-2">
           <label className="field-shell">
-            <span className="field-label">公司名称</span>
+            <span className="field-label">{copy.labels.companyName}</span>
             <input
               className="field-input"
               name="companyName"
               value={formState.companyName}
               onChange={(event) => updateField("companyName", event.target.value)}
-              placeholder="例如：某某科技 / 某某品牌"
+              placeholder={copy.placeholders.companyName}
               required
             />
           </label>
 
           <label className="field-shell">
-            <span className="field-label">联系人</span>
+            <span className="field-label">{copy.labels.contactName}</span>
             <input
               className="field-input"
               name="contactName"
               value={formState.contactName}
               onChange={(event) => updateField("contactName", event.target.value)}
-              placeholder="请输入你的姓名"
+              placeholder={copy.placeholders.contactName}
               required
             />
           </label>
@@ -126,32 +144,34 @@ export function ContactForm({ serviceOptions }: ContactFormProps) {
 
         <div className="grid gap-4 md:grid-cols-2">
           <label className="field-shell">
-            <span className="field-label">联系方式</span>
+            <span className="field-label">{copy.labels.contact}</span>
             <input
               className="field-input"
               name="contact"
               value={formState.contact}
               onChange={(event) => updateField("contact", event.target.value)}
-              placeholder="手机 / 邮箱 / 微信"
+              placeholder={copy.placeholders.contact}
               required
             />
           </label>
 
           <label className="field-shell">
-            <span className="field-label">目标市场</span>
+            <span className="field-label">{copy.labels.targetMarket}</span>
             <input
               className="field-input"
               name="targetMarket"
               value={formState.targetMarket}
-              onChange={(event) => updateField("targetMarket", event.target.value)}
-              placeholder="北美 / 欧洲 / 东南亚等"
+              onChange={(event) =>
+                updateField("targetMarket", event.target.value)
+              }
+              placeholder={copy.placeholders.targetMarket}
               required
             />
           </label>
         </div>
 
         <label className="field-shell">
-          <span className="field-label">服务需求</span>
+          <span className="field-label">{copy.labels.serviceNeed}</span>
           <select
             className="field-input"
             name="serviceNeed"
@@ -168,27 +188,25 @@ export function ContactForm({ serviceOptions }: ContactFormProps) {
         </label>
 
         <label className="field-shell">
-          <span className="field-label">需求说明</span>
+          <span className="field-label">{copy.labels.message}</span>
           <textarea
             className="field-input min-h-36 resize-y"
             name="message"
             value={formState.message}
             onChange={(event) => updateField("message", event.target.value)}
-            placeholder="告诉我们你当前的品牌阶段、想进入的市场，以及希望解决的官网、内容、平台或展会问题。"
+            placeholder={copy.placeholders.message}
             required
           />
         </label>
 
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm text-white/60">
-            提交后将进入后台线索池，方便顾问团队统一跟进。
-          </p>
+          <p className="text-sm text-white/60">{copy.helperText}</p>
           <button
             className="primary-button"
             type="submit"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "提交中..." : "提交咨询需求"}
+            {isSubmitting ? copy.submitting : copy.submit}
           </button>
         </div>
 
@@ -214,15 +232,15 @@ export function ContactForm({ serviceOptions }: ContactFormProps) {
             className="glass-panel w-full max-w-xl p-7 sm:p-9"
             role="dialog"
           >
-            <span className="section-kicker">BOOKING RECEIVED</span>
+            <span className="section-kicker">{copy.successDialog.kicker}</span>
             <h3
               className="mt-5 font-display text-3xl font-semibold text-white"
               id="booking-success-title"
             >
-              预约已收到
+              {copy.successDialog.title}
             </h3>
             <p className="mt-5 text-base leading-8 text-white/74">
-              我们已经收到你的预约。姜生的团队会在24小时内联系你了解更详细的需求。
+              {copy.successDialog.description}
             </p>
 
             <div className="mt-7 flex justify-end">
@@ -231,7 +249,7 @@ export function ContactForm({ serviceOptions }: ContactFormProps) {
                 type="button"
                 onClick={() => setIsSuccessDialogOpen(false)}
               >
-                知道了
+                {copy.successDialog.confirm}
               </button>
             </div>
           </div>
