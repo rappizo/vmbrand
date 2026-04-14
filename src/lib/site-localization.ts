@@ -254,7 +254,7 @@ const englishCopy: HomeCopy = {
       "End-to-end coordination from booking and design to build-up and on-site delivery",
   },
   founderImageAlt:
-    "Jiangsheng, founder of Jiangsheng Brand Consulting (Shenzhen) Co., Ltd.",
+    "Mr. Jiang, founder of Jiangsheng Brand Consulting (Shenzhen) Co., Ltd.",
   documentTitle: "VM Brands | Global Brand Consulting",
 };
 
@@ -371,7 +371,7 @@ function buildEnglishContent(content: SiteContent): SiteContent {
     {
       title: "Senior Advisory, Specialist Execution",
       description:
-        "Jiangsheng leads the strategic direction, while a 100+ person team carries design, content, media, operations, and production into action.",
+        "Mr. Jiang leads the strategic direction, while a 100+ person team carries design, content, media, operations, and production into action.",
     },
     {
       title: "Growth Rhythm Across Touchpoints",
@@ -441,7 +441,7 @@ function buildEnglishContent(content: SiteContent): SiteContent {
       subtitle:
         "From strategic positioning and visual identity to websites, content, social media, marketplaces, and exhibitions, we help brands expand overseas with one integrated execution model.",
       description:
-        "Led by Jiangsheng with 20 years of experience, we have supported 100+ brands in overseas expansion, 300+ exhibition projects abroad, and coordinate a 100+ person specialist team for brand globalization delivery.",
+        "Led by Mr. Jiang with 20 years of experience, we have supported 100+ brands in overseas expansion, 300+ exhibition projects abroad, and coordinate a 100+ person specialist team for brand globalization delivery.",
       primaryCta: "Book a Consultation",
       secondaryCta: "Explore Services",
       highlights: [
@@ -452,10 +452,10 @@ function buildEnglishContent(content: SiteContent): SiteContent {
       ],
     },
     founder: {
-      name: "Jiangsheng",
+      name: "Mr. Jiang",
       title: "Founder / Brand Globalization Strategist",
       summary:
-        "Jiangsheng has spent two decades helping Chinese brands turn fragmented outbound efforts into complete international brand systems.",
+        "Mr. Jiang has spent two decades helping Chinese brands turn fragmented outbound efforts into complete international brand systems.",
       bio:
         "From strategy, storytelling, and visual systems to websites, content, channel execution, and exhibitions, he works closely with teams to translate brand direction into market-facing delivery.",
       teamCaption:
@@ -544,7 +544,7 @@ export function getContactFormCopy(language: Language): ContactFormCopy {
         kicker: "BOOKING RECEIVED",
         title: "We've received your booking",
         description:
-          "Jiangsheng's team will contact you within 24 hours to understand your needs in more detail.",
+          "Mr. Jiang's team will contact you within 24 hours to understand your needs in more detail.",
         confirm: "Got it",
       },
     };
